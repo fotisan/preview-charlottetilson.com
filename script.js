@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   
-  /* --- 1. Λειτουργία Mobile Menu --- */
+  // 1. Mobile Menu Toggle
   const navToggle = document.getElementById('navToggle');
   const navPanel = document.getElementById('navPanel');
 
@@ -12,28 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* --- 2. Scroll Reveal Animation --- */
+  // 2. Scroll Reveal Animation
   const revealElements = document.querySelectorAll('.reveal');
 
   const revealObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('in-view');
-        // Προαιρετικά: σταματάμε να παρακολουθούμε το στοιχείο αφού εμφανιστεί
         observer.unobserve(entry.target); 
       }
     });
   }, {
-    root: null,
-    threshold: 0.15, // Εμφάνιση όταν φανεί το 15% του στοιχείου
-    rootMargin: "0px 0px -50px 0px"
+    threshold: 0.1,
+    rootMargin: "0px 0px -40px 0px"
   });
 
   revealElements.forEach(el => revealObserver.observe(el));
 
-  /* --- 3. Scroll to Top Button --- */
+  // 3. Scroll to Top Button
   const toTopBtn = document.getElementById('toTop');
-  
   if (toTopBtn) {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 400) {
@@ -47,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
-  
-  /* --- 4. Copyright Year Update --- */
+
+  // 4. Update Copyright Year automatically
   const yearSpan = document.getElementById('year');
   if(yearSpan) {
     yearSpan.textContent = new Date().getFullYear();
