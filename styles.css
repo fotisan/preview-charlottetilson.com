@@ -89,14 +89,13 @@ a:hover{ color: var(--accent); }
 .hero-card{ position: relative; }
 .hero-image{ border-radius: 12px; box-shadow: var(--shadow); width: 100%; height: auto; object-fit: cover; aspect-ratio: 4/3; }
 
-/* --- Η ΑΛΛΑΓΗ ΕΙΝΑΙ ΕΔΩ (bottom: -90px) --- */
 .hero-card-body{ 
   background: #fff; 
   padding: 20px; 
   border-radius: 12px; 
   box-shadow: var(--shadow); 
   position: absolute; 
-  bottom: -90px; /* ΑΛΛΑΧΤΗΚΕ ΑΠΟ -30px ΣΕ -90px ΓΙΑ ΝΑ ΠΑΕΙ ΠΙΟ ΚΑΤΩ */
+  bottom: -90px; 
   left: -30px; 
   max-width: 320px; 
   border: 1px solid var(--line); 
@@ -189,4 +188,17 @@ a:hover{ color: var(--accent); }
   .nav-panel.open{ display: flex; }
   .nav-toggle{ display: block; }
   .nav-cta{ width: 100%; text-align: center; }
+
+  /* --- FIX ΓΙΑ BUTTONS ΣΤΟ HERO (MOBILE) --- */
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Κενό μεταξύ των κουμπιών */
+  }
+  .hero-actions .btn {
+    width: 100%; /* Πλήρες πλάτος για καλύτερη αίσθηση αφής */
+  }
+  .hero-actions .btn-ghost {
+    margin-left: 0; /* Αφαίρεση του αριστερού περιθωρίου που έχει στο desktop */
+  }
 }
