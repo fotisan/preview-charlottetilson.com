@@ -10,23 +10,32 @@
   };
 
   ready(() => {
-    // 1. Current year update
+    // Current year
     const yearEl = document.getElementById("year");
     if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-    // 2. Mobile navigation toggle
+    // Mobile navigation
     const navToggle = document.getElementById("navToggle");
     const navPanel = document.getElementById("navPanel");
 
     if (navToggle && navPanel) {
       const closeNav = () => {
         navPanel.classList.remove("open");
+        document.body.classList.remove("nav-open"); // Αφαίρεση κλάσης
         navToggle.setAttribute("aria-expanded", "false");
       };
 
       navToggle.addEventListener("click", (e) => {
         e.stopPropagation();
         const isOpen = navPanel.classList.toggle("open");
+        
+        // Προσθήκη/Αφαίρεση κλάσης στο body για το scroll lock
+        if (isOpen) {
+          document.body.classList.add("nav-open");
+        } else {
+          document.body.classList.remove("nav-open");
+        }
+
         navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
       });
 
@@ -34,50 +43,106 @@
         if (!navPanel.contains(e.target) && !navToggle.contains(e.target)) closeNav();
       });
 
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeNav();
+      });
+
       navPanel.querySelectorAll("a").forEach((link) => {
         link.addEventListener("click", closeNav);
       });
     }
 
-    // 3. Accordion (FAQs)
+    // Accordion
     document.querySelectorAll("[data-accordion]").forEach((accordion) => {
       const buttons = Array.from(accordion.querySelectorAll(".acc-item"));
       buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
           const isExpanded = btn.getAttribute("aria-expanded") === "true";
-          const panel = btn.nextElementSibling;
 
-          // Toggle current
+          // Close all
+          buttons.forEach((b) => {
+            b.setAttribute("aria-expanded", "false");
+            const panel = b.nextElementSibling;
+            if (panel && panel.classList.contains("acc-a")) panel.hidden = true;
+          });
+
+          // Open current if it was closed
           btn.setAttribute("aria-expanded", isExpanded ? "false" : "true");
-          if (panel) panel.hidden = isExpanded;
+          const panel = btn.nextElementSibling;
+          if (panel && panel.classList.contains("acc-a")) panel.hidden = isExpanded;
         });
       });
     });
 
-    // 4. Scroll to top button
+    // Scroll to top
     const toTop = document.getElementById("toTop");
     if (toTop) {
-      window.addEventListener("scroll", () => {
+      const setState = () => {
         if (window.scrollY > 450) toTop.classList.add("show");
         else toTop.classList.remove("show");
-      }, { passive: true });
+      };
+
+      window.addEventListener("scroll", setState, { passive: true });
+      setState();
 
       toTop.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
 
-    // 5. Scroll Reveal Animation
-    const revealEls = document.querySelectorAll(".reveal");
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
+    // Lightweight form validation
+    const form = document.getElementById("contactForm");
+    if (form) {
+      const markInvalid = (el, isInvalid) => {
+        if (isInvalid) el.classList.add("invalid");
+        else el.classList.remove("invalid");
+      };
 
-    revealEls.forEach((el) => observer.observe(el));
+      form.addEventListener("submit", (e) => {
+        const requiredFields = Array.from(form.querySelectorAll("[required]"));
+        let ok = true;
+
+        requiredFields.forEach((field) => {
+          const value = (field.value || "").trim();
+          const invalid = value.length === 0;
+          markInvalid(field, invalid);
+          if (invalid) ok = false;
+        });
+
+        if (!ok) e.preventDefault();
+      });
+
+      form.querySelectorAll("input, textarea").forEach((field) => {
+        field.addEventListener("input", () => markInvalid(field, false));
+        field.addEventListener("blur", () => {
+          if (field.hasAttribute("required")) markInvalid(field, (field.value || "").trim().length === 0);
+        });
+      });
+    }
+
+    // Scroll reveal (load on user scroll)
+    const revealEls = Array.from(document.querySelectorAll(".reveal"));
+    if (!revealEls.length) return;
+
+    const show = (el) => el.classList.add("in-view");
+
+    if (!("IntersectionObserver" in window)) {
+      revealEls.forEach(show);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            show(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    revealEls.forEach((el) => io.observe(el));
   });
 })();
