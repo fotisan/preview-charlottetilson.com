@@ -1,9 +1,9 @@
 :root{
   /* COLOR PALETTE: Grounded, Earthy, Professional */
-  --bg: #faf9f6; /* Off-white background */
+  --bg: #faf9f6; 
   --card: #ffffff;
-  --text: #2c3632; /* Deep grey-green text */
-  --muted: #5d6663; /* Softer grey text */
+  --text: #2c3632; 
+  --muted: #5d6663; 
 
   /* Primary Accent: Sage Green */
   --accent: #5e8c85; 
@@ -19,6 +19,11 @@
 
   --font: "Inter", sans-serif;
   --serif: "Playfair Display", serif;
+}
+
+/* --- NEW FIX: Κλειδώνει το scroll όταν είναι ανοιχτό το mobile menu --- */
+body.nav-open {
+  overflow: hidden;
 }
 
 *{ box-sizing: border-box; }
@@ -110,7 +115,7 @@ a:hover{ color: var(--accent); }
 .section-head{ max-width: 700px; margin: 0 auto 50px; text-align: center; }
 .section-title{ font-family: var(--serif); font-size: 38px; margin: 0 0 16px; color: var(--text); }
 .split{ display:grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
-.reverse-layout .reveal:first-child{ order: 2; } /* Useful for alternating layouts */
+.reverse-layout .reveal:first-child{ order: 2; } 
 
 /* About & Bio */
 .bio-head{ display:flex; gap: 20px; align-items: center; margin-bottom: 24px; }
@@ -184,21 +189,26 @@ a:hover{ color: var(--accent); }
   .reverse-layout .reveal:first-child{ order: initial; }
   .foot-legal{ text-align: left; }
   
-  .nav-panel{ position:absolute; top: 100%; left: 0; right: 0; background: #fff; flex-direction: column; padding: 20px; border-bottom: 1px solid var(--line); display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.05); align-items: flex-start; }
-  .nav-panel.open{ display: flex; }
+  /* --- IMPROVED: Mobile Nav Transition --- */
+  .nav-panel{ 
+    position:absolute; top: 100%; left: 0; right: 0; background: #fff; 
+    flex-direction: column; padding: 20px; border-bottom: 1px solid var(--line); 
+    display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.05); align-items: flex-start;
+    opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
+  }
+  .nav-panel.open{ display: flex; opacity: 1; transform: translateY(0); }
   .nav-toggle{ display: block; }
   .nav-cta{ width: 100%; text-align: center; }
 
-  /* --- FIX ΓΙΑ BUTTONS ΣΤΟ HERO (MOBILE) --- */
   .hero-actions {
     display: flex;
     flex-direction: column;
-    gap: 16px; /* Κενό μεταξύ των κουμπιών */
+    gap: 16px; 
   }
   .hero-actions .btn {
-    width: 100%; /* Πλήρες πλάτος για καλύτερη αίσθηση αφής */
+    width: 100%; 
   }
   .hero-actions .btn-ghost {
-    margin-left: 0; /* Αφαίρεση του αριστερού περιθωρίου που έχει στο desktop */
+    margin-left: 0; 
   }
 }
