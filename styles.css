@@ -21,7 +21,7 @@
   --serif: "Playfair Display", serif;
 }
 
-/* --- NEW FIX: Κλειδώνει το scroll όταν είναι ανοιχτό το mobile menu --- */
+/* --- FIX: Κλειδώνει το scroll όταν είναι ανοιχτό το mobile menu --- */
 body.nav-open {
   overflow: hidden;
 }
